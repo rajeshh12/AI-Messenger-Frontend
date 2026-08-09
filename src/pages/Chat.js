@@ -1547,39 +1547,6 @@ function Chat() {
                     </button>
                   ))}
                 </div>
-
-                <div className="mt-5 flex flex-wrap justify-center gap-2">
-                  {[
-                    "Explain something",
-                    "Help me code",
-                    "Brainstorm ideas",
-                  ].map((suggestion) => (
-                    <button
-                      key={suggestion}
-                      onClick={() => {
-                        setInput(suggestion);
-
-                        setTimeout(() => {
-                          textareaRef.current?.focus();
-                        }, 50);
-                      }}
-                      className="
-                          px-4
-                          py-2
-                          rounded-full
-                          border border-white/[0.06]
-                          bg-white/[0.015]
-                          hover:bg-white/[0.04]
-                          text-xs
-                          text-gray-600
-                          hover:text-gray-300
-                          transition
-                        "
-                    >
-                      {suggestion}
-                    </button>
-                  ))}
-                </div>
               </div>
             </div>
           )}
