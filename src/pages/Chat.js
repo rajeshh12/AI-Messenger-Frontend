@@ -1417,18 +1417,19 @@ function Chat() {
                 <p className="text-gray-600 mt-3 max-w-lg mx-auto text-sm">
                   Ask a question, explore an idea, or start a conversation.
                 </p>
-
                 <form onSubmit={handleSendMessage} className="mt-8">
                   <div
                     className="
-                    rounded-2xl
-                    bg-[#10151c]
-                    border border-white/[0.08]
-                    shadow-2xl
-                    shadow-black/20
-                    focus-within:border-blue-500/30
-                    transition
-                  "
+      rounded-2xl
+      bg-[#10151c]
+      border border-white/[0.08]
+      shadow-2xl
+      shadow-black/20
+      focus-within:border-blue-500/30
+      focus-within:shadow-blue-500/5
+      transition-all
+      duration-200
+    "
                   >
                     {selectedFile && (
                       <FilePreviewCard
@@ -1444,30 +1445,29 @@ function Chat() {
                       value={input}
                       onChange={(e) => {
                         setInput(e.target.value);
-
                         resizeTextarea(e.target);
                       }}
                       onKeyDown={handleInputKeyDown}
                       rows="1"
                       placeholder="Message..."
                       style={{
-                        minHeight: "64px",
+                        minHeight: "72px",
                         maxHeight: "180px",
                       }}
                       className="
-                        w-full
-                        resize-none
-                        overflow-hidden
-                        bg-transparent
-                        outline-none
-                        px-5
-                        pt-5
-                        pb-3
-                        text-gray-100
-                        placeholder:text-gray-600
-                        text-sm
-                        leading-6
-                      "
+        w-full
+        resize-none
+        overflow-hidden
+        bg-transparent
+        outline-none
+        px-5
+        pt-5
+        pb-3
+        text-gray-100
+        placeholder:text-gray-500
+        text-base
+        leading-7
+      "
                     />
 
                     <div className="px-4 pb-3 flex items-center justify-between">
@@ -1481,7 +1481,7 @@ function Chat() {
                           uploadingFile={uploadingFile}
                         />
 
-                        <span className="text-[10px] text-gray-700">
+                        <span className="text-[11px] text-gray-600">
                           Enter to send · Shift + Enter
                         </span>
                       </div>
@@ -1490,24 +1490,63 @@ function Chat() {
                         type="submit"
                         disabled={loading || uploadingFile || !input.trim()}
                         className="
-                          w-10
-                          h-10
-                          rounded-xl
-                          bg-blue-600
-                          hover:bg-blue-500
-                          disabled:opacity-30
-                          disabled:cursor-not-allowed
-                          flex
-                          items-center
-                          justify-center
-                          transition
-                        "
+          w-11
+          h-11
+          rounded-xl
+          bg-blue-600
+          hover:bg-blue-500
+          active:scale-95
+          disabled:opacity-30
+          disabled:cursor-not-allowed
+          flex
+          items-center
+          justify-center
+          text-lg
+          transition-all
+          duration-200
+        "
                       >
                         {loading ? "..." : "↑"}
                       </button>
                     </div>
                   </div>
                 </form>
+
+                <div className="mt-5 flex flex-wrap justify-center gap-2">
+                  {[
+                    "Explain something",
+                    "Help me code",
+                    "Brainstorm ideas",
+                  ].map((suggestion) => (
+                    <button
+                      key={suggestion}
+                      onClick={() => {
+                        setInput(suggestion);
+
+                        setTimeout(() => {
+                          textareaRef.current?.focus();
+                        }, 50);
+                      }}
+                      className="
+        px-4
+        py-2
+        rounded-full
+        border
+        border-white/[0.07]
+        bg-white/[0.015]
+        hover:bg-white/[0.05]
+        hover:border-white/[0.12]
+        text-[13px]
+        text-gray-500
+        hover:text-gray-200
+        transition-all
+        duration-200
+      "
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+                </div>
 
                 <div className="mt-5 flex flex-wrap justify-center gap-2">
                   {[
