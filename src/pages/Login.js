@@ -10,6 +10,9 @@ function Login() {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  // Login loading state
+  const [loading, setLoading] = useState(false);
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -22,7 +25,7 @@ function Login() {
       return;
     }
 
-    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    const emailRegex = /^[A-Za-z0-9.\_%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
     if (!emailRegex.test(trimmedEmail)) {
       setError("Please enter a valid email address");
@@ -35,6 +38,9 @@ function Login() {
     }
 
     try {
+      // Start loading after validation
+      setLoading(true);
+
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/api/auth/login`,
         {
@@ -55,6 +61,7 @@ function Login() {
 
       if (!response.ok) {
         setError(data.message);
+        setLoading(false);
         return;
       }
 
@@ -62,8 +69,11 @@ function Login() {
 
       localStorage.setItem("user", JSON.stringify(data.user));
 
+      setLoading(false);
+
       navigate("/chat");
     } catch (error) {
+      setLoading(false);
       setError("Unable to connect to server");
     }
   };
@@ -240,7 +250,7 @@ function Login() {
                       w-full
                       h-[50px]
                       px-4
-                      pr-20
+                      pr-14
                       rounded-xl
                       bg-[#090d15]
                       border border-white/[0.08]
@@ -263,33 +273,47 @@ function Login() {
 
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    disabled={loading}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
+                    title={showPassword ? "Hide password" : "Show password"}
                     className="
                       absolute
                       right-3
                       top-1/2
                       -translate-y-1/2
-                      px-2.5
-                      py-1.5
+                      w-9
+                      h-9
                       rounded-lg
-                      text-xs
-                      font-medium
+                      flex
+                      items-center
+                      justify-center
                       text-gray-500
                       hover:text-blue-300
-                      hover:bg-white/[0.05]
-                      active:scale-95
+                      hover:bg-blue-400/[0.08]
+                      active:scale-90
                       transition-all
                       duration-200
+                      disabled:opacity-40
                     "
                   >
-                    {showPassword ? "Hide" : "Show"}
+                    <span
+                      className={`text-lg transition-all duration-200 ${
+                        showPassword ? "scale-110 opacity-100" : "opacity-70"
+                      }`}
+                    >
+                      {showPassword ? "🙈" : "👁️"}
+                    </span>
                   </button>
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="
+                disabled={loading}
+                className={`
                   group
                   relative
                   w-full
@@ -309,22 +333,33 @@ function Login() {
                   shadow-blue-900/20
                   transition-all
                   duration-300
-                  hover:from-blue-500
-                  hover:via-indigo-500
-                  hover:to-purple-500
-                  hover:shadow-xl
-                  hover:shadow-blue-900/30
-                  hover:-translate-y-1
-                  active:translate-y-0
-                  active:scale-[0.98]
+                  ${
+                    loading
+                      ? "opacity-80 cursor-wait"
+                      : "hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 hover:shadow-xl hover:shadow-blue-900/30 hover:-translate-y-1 active:translate-y-0 active:scale-[0.98]"
+                  }
                   animate-[buttonIn_0.6s_ease-out_0.5s_both]
-                "
+                `}
               >
-                <span className="absolute inset-y-0 -left-20 w-16 bg-white/20 skew-x-[-20deg] transition-all duration-700 group-hover:left-[120%]" />
+                {!loading && (
+                  <>
+                    <span className="absolute inset-y-0 -left-20 w-16 bg-white/20 skew-x-[-20deg] transition-all duration-700 group-hover:left-[120%]" />
 
-                <span className="absolute inset-0 rounded-xl ring-1 ring-white/0 group-hover:ring-white/20 transition-all duration-300" />
+                    <span className="absolute inset-0 rounded-xl ring-1 ring-white/0 group-hover:ring-white/20 transition-all duration-300" />
+                  </>
+                )}
 
-                <span className="relative z-10">Login</span>
+                <span className="relative z-10 flex items-center justify-center gap-2.5">
+                  {loading ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+
+                      <span>Signing in...</span>
+                    </>
+                  ) : (
+                    <span>Login</span>
+                  )}
+                </span>
               </button>
             </form>
 
@@ -378,6 +413,7 @@ function Login() {
             opacity: 0;
             transform: translateY(18px);
           }
+
           to {
             opacity: 1;
             transform: translateY(0);
@@ -389,6 +425,7 @@ function Login() {
             opacity: 0;
             transform: translateY(-14px);
           }
+
           to {
             opacity: 1;
             transform: translateY(0);
@@ -400,6 +437,7 @@ function Login() {
             opacity: 0;
             transform: translateY(35px) scale(0.96);
           }
+
           to {
             opacity: 1;
             transform: translateY(0) scale(1);
@@ -411,6 +449,7 @@ function Login() {
             opacity: 0;
             transform: translateY(12px);
           }
+
           to {
             opacity: 1;
             transform: translateY(0);
@@ -422,6 +461,7 @@ function Login() {
             opacity: 0;
             transform: translateY(12px) scale(0.98);
           }
+
           to {
             opacity: 1;
             transform: translateY(0) scale(1);
@@ -433,6 +473,7 @@ function Login() {
             opacity: 0;
             transform: translateY(10px) scale(0.97);
           }
+
           to {
             opacity: 1;
             transform: translateY(0) scale(1);
@@ -444,9 +485,11 @@ function Login() {
             opacity: 0;
             transform: scale(0.5);
           }
+
           70% {
             transform: scale(1.15);
           }
+
           100% {
             opacity: 1;
             transform: scale(1);
@@ -458,6 +501,7 @@ function Login() {
             opacity: 0;
             transform: translateY(-8px);
           }
+
           to {
             opacity: 1;
             transform: translateY(0);
@@ -468,15 +512,19 @@ function Login() {
           0%, 100% {
             transform: translateX(0);
           }
+
           20% {
             transform: translateX(-5px);
           }
+
           40% {
             transform: translateX(5px);
           }
+
           60% {
             transform: translateX(-4px);
           }
+
           80% {
             transform: translateX(4px);
           }
@@ -486,6 +534,7 @@ function Login() {
           from {
             opacity: 0;
           }
+
           to {
             opacity: 1;
           }
@@ -496,6 +545,7 @@ function Login() {
             opacity: 0.7;
             transform: scale(0.95);
           }
+
           50% {
             opacity: 1;
             transform: scale(1.08);
@@ -507,6 +557,7 @@ function Login() {
             opacity: 0.3;
             transform: translateX(-25px);
           }
+
           50% {
             opacity: 1;
             transform: translateX(25px);
@@ -517,6 +568,7 @@ function Login() {
           from {
             background-position: 0 0;
           }
+
           to {
             background-position: 40px 40px;
           }

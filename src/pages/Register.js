@@ -11,6 +11,12 @@ function Register() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
+  // Password visibility
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Registration loading state
+  const [loading, setLoading] = useState(false);
+
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -86,7 +92,11 @@ function Register() {
       setError("Password must contain at least one special character");
       return;
     }
+
     try {
+      // Start loading only after all validations pass
+      setLoading(true);
+
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/api/auth/register`,
         {
@@ -103,10 +113,12 @@ function Register() {
           }),
         },
       );
+
       const data = await response.json();
 
       if (!response.ok) {
         setError(data.message);
+        setLoading(false);
         return;
       }
 
@@ -115,11 +127,15 @@ function Register() {
       setName("");
       setEmail("");
       setPassword("");
+      setShowPassword(false);
+
+      setLoading(false);
 
       setTimeout(() => {
         navigate("/login");
       }, 1000);
     } catch (error) {
+      setLoading(false);
       setError("Unable to connect to server");
     }
   };
@@ -311,13 +327,54 @@ function Register() {
                       Password
                     </label>
 
-                    <input
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Create a password"
-                      className="w-full px-4 py-3.5 rounded-xl bg-[#090b12] border border-white/[0.08] text-white text-sm sm:text-base placeholder:text-gray-600 outline-none transition-all duration-300 hover:border-violet-400/20 hover:-translate-y-[1px] focus:border-violet-400/50 focus:ring-4 focus:ring-violet-400/[0.06] focus:-translate-y-[1px]"
-                    />
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Create a password"
+                        className="w-full px-4 py-3.5 pr-14 rounded-xl bg-[#090b12] border border-white/[0.08] text-white text-sm sm:text-base placeholder:text-gray-600 outline-none transition-all duration-300 hover:border-violet-400/20 hover:-translate-y-[1px] focus:border-violet-400/50 focus:ring-4 focus:ring-violet-400/[0.06] focus:-translate-y-[1px]"
+                      />
+
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        disabled={loading}
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
+                        title={showPassword ? "Hide password" : "Show password"}
+                        className="
+                          absolute
+                          right-3
+                          top-1/2
+                          -translate-y-1/2
+                          w-9
+                          h-9
+                          rounded-lg
+                          flex
+                          items-center
+                          justify-center
+                          text-gray-500
+                          hover:text-violet-300
+                          hover:bg-violet-400/[0.08]
+                          active:scale-90
+                          transition-all
+                          duration-200
+                          disabled:opacity-40
+                        "
+                      >
+                        <span
+                          className={`text-lg transition-all duration-200 ${
+                            showPassword
+                              ? "scale-110 opacity-100"
+                              : "opacity-70"
+                          }`}
+                        >
+                          {showPassword ? "🙈" : "👁️"}
+                        </span>
+                      </button>
+                    </div>
 
                     <p className="text-[11px] sm:text-xs leading-relaxed text-gray-600 mt-2.5">
                       8–72 characters · uppercase · lowercase · number · special
@@ -327,13 +384,32 @@ function Register() {
 
                   <button
                     type="submit"
-                    className="group relative w-full overflow-hidden py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-violet-600 text-white text-sm sm:text-base font-semibold shadow-lg shadow-blue-900/20 transition-all duration-300 hover:shadow-xl hover:shadow-violet-900/30 hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] animate-[buttonIn_0.6s_ease-out_0.7s_both]"
+                    disabled={loading}
+                    className={`group relative w-full overflow-hidden py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-violet-600 text-white text-sm sm:text-base font-semibold shadow-lg shadow-blue-900/20 transition-all duration-300 ${
+                      loading
+                        ? "opacity-80 cursor-wait"
+                        : "hover:shadow-xl hover:shadow-violet-900/30 hover:-translate-y-1 active:translate-y-0 active:scale-[0.98]"
+                    } animate-[buttonIn_0.6s_ease-out_0.7s_both]`}
                   >
-                    <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/15 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                    {!loading && (
+                      <>
+                        <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/15 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
 
-                    <span className="absolute inset-0 rounded-xl ring-1 ring-white/0 group-hover:ring-white/20 transition-all duration-300" />
+                        <span className="absolute inset-0 rounded-xl ring-1 ring-white/0 group-hover:ring-white/20 transition-all duration-300" />
+                      </>
+                    )}
 
-                    <span className="relative">Create Account</span>
+                    <span className="relative flex items-center justify-center gap-2.5">
+                      {loading ? (
+                        <>
+                          <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+
+                          <span>Creating account...</span>
+                        </>
+                      ) : (
+                        <span>Create Account</span>
+                      )}
+                    </span>
                   </button>
                 </form>
 
