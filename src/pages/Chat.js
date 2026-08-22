@@ -666,19 +666,38 @@ function Chat() {
 
     if (!currentPassword || !newPassword || !confirmPassword) {
       setPasswordError("All password fields are required");
-
       return;
     }
 
+    // Minimum 6 characters
     if (newPassword.length < 6) {
       setPasswordError("New password must be at least 6 characters");
-
       return;
     }
 
+    // At least one capital letter
+    if (!/[A-Z]/.test(newPassword)) {
+      setPasswordError("New password must contain at least one capital letter");
+      return;
+    }
+
+    // At least one number
+    if (!/[0-9]/.test(newPassword)) {
+      setPasswordError("New password must contain at least one number");
+      return;
+    }
+
+    // At least one special character
+    if (!/[!@#$%^&*(),.?":{}|<>_\-\\[\];'/`~+=]/.test(newPassword)) {
+      setPasswordError(
+        "New password must contain at least one special character",
+      );
+      return;
+    }
+
+    // New password and confirm password must match
     if (newPassword !== confirmPassword) {
       setPasswordError("New passwords do not match");
-
       return;
     }
 
@@ -693,7 +712,6 @@ function Chat() {
 
       if (!data.success) {
         setPasswordError(data.message || "Unable to change password");
-
         return;
       }
 
@@ -706,9 +724,7 @@ function Chat() {
       });
 
       setShowCurrentPassword(false);
-
       setShowNewPassword(false);
-
       setShowConfirmPassword(false);
     } catch (error) {
       console.error("Change Password Error:", error);
@@ -2168,8 +2184,6 @@ function Chat() {
                       Update your account password
                     </p>
                   </div>
-
-                  <span className="text-gray-600">→</span>
                 </button>
                 <button
                   type="button"
