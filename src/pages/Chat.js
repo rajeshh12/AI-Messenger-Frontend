@@ -21,7 +21,7 @@ function Chat() {
   const navigate = useNavigate();
 
   const [showAdminModal, setShowAdminModal] = useState(false);
-
+  const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -53,8 +53,6 @@ function Chat() {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
   const [settingsOpen, setSettingsOpen] = useState(false);
-
-  const [changePasswordOpen, setChangePasswordOpen] = useState(false);
 
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: "",
@@ -2130,7 +2128,49 @@ function Chat() {
                     </div>
                   </div>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPasswordError("");
+                    setPasswordSuccess("");
 
+                    setPasswordForm({
+                      currentPassword: "",
+                      newPassword: "",
+                      confirmPassword: "",
+                    });
+
+                    setChangePasswordOpen(true);
+                  }}
+                  className="
+    w-full
+    flex
+    items-center
+    gap-3
+    px-3
+    py-3.5
+    rounded-xl
+    text-left
+    text-gray-300
+    hover:text-white
+    hover:bg-white/[0.05]
+    transition
+  "
+                >
+                  <div className="w-9 h-9 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
+                    🔑
+                  </div>
+
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">Change password</p>
+
+                    <p className="text-[10px] text-gray-600 mt-0.5">
+                      Update your account password
+                    </p>
+                  </div>
+
+                  <span className="text-gray-600">→</span>
+                </button>
                 <button
                   type="button"
                   onClick={requestLogout}

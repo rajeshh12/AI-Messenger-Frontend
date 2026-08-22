@@ -130,19 +130,8 @@ export const changePassword = async (
   newPassword,
   confirmPassword,
 ) => {
-  const token = getToken();
-
-  if (!token) {
-    throw new Error("You are not logged in");
-  }
-
-  const response = await fetch(`${API_URL}/auth/change-password`, {
-    method: "PATCH",
-
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+  return apiRequest("/auth/change-password", {
+    method: "POST",
 
     body: JSON.stringify({
       currentPassword,
@@ -150,20 +139,6 @@ export const changePassword = async (
       confirmPassword,
     }),
   });
-
-  let data;
-
-  try {
-    data = await response.json();
-  } catch {
-    throw new Error("Backend returned an invalid response");
-  }
-
-  if (!response.ok) {
-    throw new Error(data.message || "Unable to change password");
-  }
-
-  return data;
 };
 
 export const deleteAccount = async () => {
