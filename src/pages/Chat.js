@@ -73,6 +73,7 @@ function Chat() {
   const fileInputRef = useRef(null);
 
   const [showFileMenu, setShowFileMenu] = useState(false);
+  const [chatActionMenuId, setChatActionMenuId] = useState(null);
   const [fileAccept, setFileAccept] = useState("*/*");
 
   const [renameConversationId, setRenameConversationId] = useState(null);
@@ -117,6 +118,20 @@ function Chat() {
   };
 
   useEffect(() => {
+    const handleChatActionOutsideClick = (event) => {
+      if (!event.target.closest("[data-chat-actions]")) {
+        setChatActionMenuId(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleChatActionOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleChatActionOutsideClick);
+    };
+  }, []);
+
+  useEffect(() => {
     const storedUser = localStorage.getItem("user");
 
     if (storedUser) {
@@ -126,6 +141,20 @@ function Chat() {
         console.log("Unable to read user information");
       }
     }
+  }, []);
+
+  useEffect(() => {
+    const handleFileMenuOutsideClick = (event) => {
+      if (!event.target.closest("[data-file-menu]")) {
+        setShowFileMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleFileMenuOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleFileMenuOutsideClick);
+    };
   }, []);
 
   useEffect(() => {
@@ -1235,57 +1264,180 @@ function Chat() {
                           </p>
                         </div>
 
-                        <div className="flex items-center gap-1">
+                        <div
+                          className="relative flex items-center"
+                          data-chat-actions
+                        >
+                          {/* Desktop actions */}
+                          <div
+                            className="
+      hidden
+      md:flex
+      items-center
+      gap-1
+      opacity-0
+      group-hover:opacity-100
+      transition
+    "
+                          >
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+
+                                setChatActionMenuId(null);
+
+                                setRenameConversationId(conversation._id);
+                                setRenameTitle(conversation.title || "");
+                              }}
+                              className="
+        w-7
+        h-7
+        rounded-lg
+        flex
+        items-center
+        justify-center
+        text-gray-600
+        hover:text-blue-400
+        hover:bg-blue-500/10
+        transition
+      "
+                              title="Rename conversation"
+                            >
+                              ✎
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+
+                                setChatActionMenuId(null);
+
+                                requestDeleteConversation(conversation._id);
+                              }}
+                              className="
+        w-7
+        h-7
+        rounded-lg
+        flex
+        items-center
+        justify-center
+        text-gray-600
+        hover:text-red-400
+        hover:bg-red-500/10
+        transition
+      "
+                              title="Delete conversation"
+                            >
+                              ×
+                            </button>
+                          </div>
+
+                          {/* Mobile / touch action button */}
                           <button
+                            type="button"
                             onClick={(e) => {
                               e.stopPropagation();
 
-                              setRenameConversationId(conversation._id);
-                              setRenameTitle(conversation.title || "");
+                              setChatActionMenuId((previous) =>
+                                previous === conversation._id
+                                  ? null
+                                  : conversation._id,
+                              );
                             }}
                             className="
-      opacity-0
-      group-hover:opacity-100
-      w-7
-      h-7
+      md:hidden
+      w-8
+      h-8
       rounded-lg
       flex
       items-center
       justify-center
-      text-gray-600
-      hover:text-blue-400
-      hover:bg-blue-500/10
+      text-gray-500
+      hover:text-white
+      hover:bg-white/[0.06]
       transition
+      flex-shrink-0
     "
-                            title="Rename conversation"
+                            title="Chat actions"
                           >
-                            ✎
+                            ⋮
                           </button>
 
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
+                          {/* Mobile action popup */}
+                          {chatActionMenuId === conversation._id && (
+                            <div
+                              className="
+        absolute
+        right-0
+        top-9
+        w-36
+        p-1.5
+        rounded-xl
+        bg-[#151b23]
+        border
+        border-white/[0.08]
+        shadow-2xl
+        shadow-black/50
+        z-[100]
+      "
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setChatActionMenuId(null);
 
-                              requestDeleteConversation(conversation._id);
-                            }}
-                            className="
-      opacity-0
-      group-hover:opacity-100
-      w-7
-      h-7
-      rounded-lg
-      flex
-      items-center
-      justify-center
-      text-gray-600
-      hover:text-red-400
-      hover:bg-red-500/10
-      transition
-    "
-                            title="Delete conversation"
-                          >
-                            ×
-                          </button>
+                                  setRenameConversationId(conversation._id);
+                                  setRenameTitle(conversation.title || "");
+                                }}
+                                className="
+          w-full
+          flex
+          items-center
+          gap-3
+          px-3
+          py-2.5
+          rounded-lg
+          text-sm
+          text-gray-300
+          hover:text-white
+          hover:bg-white/[0.06]
+          transition
+        "
+                              >
+                                <span>✎</span>
+                                <span>Rename</span>
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setChatActionMenuId(null);
+
+                                  requestDeleteConversation(conversation._id);
+                                }}
+                                className="
+          w-full
+          flex
+          items-center
+          gap-3
+          px-3
+          py-2.5
+          rounded-lg
+          text-sm
+          text-red-400
+          hover:text-red-300
+          hover:bg-red-500/10
+          transition
+        "
+                              >
+                                <span>×</span>
+                                <span>Delete</span>
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </>
                     )}
@@ -2604,7 +2756,7 @@ function FileMenu({
   };
 
   return (
-    <div className="relative">
+    <div className="relative" data-file-menu>
       <button
         type="button"
         onClick={() => setShowFileMenu((previous) => !previous)}
@@ -2801,18 +2953,18 @@ function FilePreviewCard({ selectedFile, uploadingFile, onPreview, onRemove }) {
       >
         <div
           className="
-            w-9
-            h-9
-            rounded-lg
-            bg-blue-500/10
-            text-blue-400
-            flex
-            items-center
-            justify-center
-            flex-shrink-0
-          "
+    w-9
+    h-9
+    rounded-lg
+    bg-blue-500/10
+    text-blue-400
+    flex
+    items-center
+    justify-center
+    flex-shrink-0
+  "
         >
-          📄
+          {file.type?.startsWith("image/") ? "🖼️" : "📄"}
         </div>
 
         <div className="min-w-0">
