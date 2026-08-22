@@ -46,7 +46,7 @@ quick access to start chatting or log into an existing account.
 
 <div align="center">
 
-<img src="docs/screenshots/Home.png" width="900" alt="AI Messenger Home Page"/>
+<img src="C:\Users\Rajesh\OneDrive\Pictures\Home.png" width="900" alt="AI Messenger Home Page"/>
 
 </div>
 
