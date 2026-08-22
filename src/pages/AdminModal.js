@@ -35,13 +35,10 @@ function AdminModal({ isOpen, onClose }) {
         return;
       }
 
-      // Save admin token
       localStorage.setItem("adminToken", data.token);
 
-      // Close modal
       onClose();
 
-      // Navigate to admin page
       navigate("/admin/passwords");
 
       setPassword("");

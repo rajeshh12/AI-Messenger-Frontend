@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
+import ThemeToggle from "../components/ThemeToggle";
 
 function Register() {
   const navigate = useNavigate();
-
+  const { theme, toggleTheme } = useTheme();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const isLight = theme === "light";
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  // Password visibility
   const [showPassword, setShowPassword] = useState(false);
 
-  // Registration loading state
   const [loading, setLoading] = useState(false);
 
   const handleRegister = async (e) => {
@@ -94,7 +94,6 @@ function Register() {
     }
 
     try {
-      // Start loading only after all validations pass
       setLoading(true);
 
       const response = await fetch(
@@ -141,13 +140,27 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-[#08090f] text-white flex items-center justify-center px-4 sm:px-6 py-6 sm:py-10 overflow-hidden relative">
+    <div
+      className={`min-h-screen flex items-center justify-center px-4 sm:px-6 py-6 sm:py-10 overflow-hidden relative transition-colors duration-300 ${
+        isLight ? "bg-gray-50 text-gray-900" : "bg-[#08090f] text-white"
+      }`}
+    >
+      {" "}
+      <button
+        type="button"
+        onClick={toggleTheme}
+        className={`absolute top-5 right-5 z-50 w-10 h-10 rounded-xl flex items-center justify-center border transition-all duration-300 ${
+          isLight
+            ? "bg-white border-gray-200 text-gray-700 hover:bg-gray-100"
+            : "bg-[#11161f] border-white/[0.08] text-gray-300 hover:bg-white/[0.06] hover:text-white"
+        }`}
+        title={isLight ? "Switch to dark theme" : "Switch to light theme"}
+      >
+        {isLight ? "🌙" : "☀️"}
+      </button>
       <div className="absolute w-72 h-72 sm:w-96 sm:h-96 bg-violet-600/10 rounded-full blur-[120px] -top-32 -left-32 animate-pulse" />
-
       <div className="absolute w-72 h-72 sm:w-96 sm:h-96 bg-cyan-500/10 rounded-full blur-[120px] -bottom-40 -right-32 animate-pulse" />
-
       <div className="absolute w-56 h-56 bg-pink-500/[0.06] rounded-full blur-[100px] top-1/2 left-1/2 animate-[floatGlow_7s_ease-in-out_infinite]" />
-
       <div className="relative z-10 w-full max-w-5xl animate-[pageEnter_0.8s_ease-out]">
         <div className="mb-5 sm:mb-7 animate-[slideRight_0.7s_ease-out]">
           <Link
@@ -248,15 +261,41 @@ function Register() {
             <div className="relative group">
               <div className="absolute -inset-[1px] rounded-[25px] bg-gradient-to-br from-cyan-500/30 via-violet-500/20 to-pink-500/20 opacity-80 transition-all duration-500 group-hover:opacity-100 group-hover:blur-[2px]" />
 
-              <div className="relative bg-[#11131c]/95 backdrop-blur-2xl border border-white/[0.07] rounded-[24px] p-5 sm:p-7 shadow-2xl shadow-black/50 transition-all duration-500 group-hover:border-white/[0.11] group-hover:-translate-y-1 group-hover:shadow-violet-950/20">
+              <div
+                className={`
+    relative
+    backdrop-blur-2xl
+    rounded-[24px]
+    p-5
+    sm:p-7
+    shadow-2xl
+    transition-all
+    duration-500
+    group-hover:-translate-y-1
+
+    ${
+      isLight
+        ? "bg-white/95 border border-gray-200 shadow-gray-200/60 group-hover:border-gray-300"
+        : "bg-[#11131c]/95 border border-white/[0.07] shadow-black/50 group-hover:border-white/[0.11] group-hover:shadow-violet-950/20"
+    }
+  `}
+              >
                 <div className="mb-7 animate-[fadeUp_0.6s_ease-out_0.3s_both]">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h2 className="text-xl sm:text-2xl font-semibold text-white">
+                      <h2
+                        className={`text-xl sm:text-2xl font-semibold ${
+                          isLight ? "text-gray-900" : "text-white"
+                        }`}
+                      >
                         Get started
                       </h2>
 
-                      <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                      <p
+                        className={`text-xs sm:text-sm mt-1 ${
+                          isLight ? "text-gray-500" : "text-gray-500"
+                        }`}
+                      >
                         It only takes a moment.
                       </p>
                     </div>
@@ -298,13 +337,39 @@ function Register() {
                     <label className="block text-sm font-medium text-gray-300 mb-2">
                       Name
                     </label>
-
                     <input
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Enter your name"
-                      className="w-full px-4 py-3.5 rounded-xl bg-[#090b12] border border-white/[0.08] text-white text-sm sm:text-base placeholder:text-gray-600 outline-none transition-all duration-300 hover:border-cyan-400/20 hover:-translate-y-[1px] focus:border-cyan-400/50 focus:ring-4 focus:ring-cyan-400/[0.06] focus:-translate-y-[1px]"
+                      className={`
+    w-full
+    px-4
+    py-3.5
+    rounded-xl
+
+    ${
+      isLight
+        ? "bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400"
+        : "bg-[#090b12] border border-white/[0.08] text-white placeholder:text-gray-600"
+    }
+
+    text-sm
+    sm:text-base
+    outline-none
+    transition-all
+    duration-300
+
+    ${
+      isLight
+        ? "hover:border-cyan-400/40 hover:-translate-y-[1px] focus:border-cyan-400/60 focus:bg-white"
+        : "hover:border-cyan-400/20 hover:-translate-y-[1px] focus:border-cyan-400/50"
+    }
+
+    focus:ring-4
+    focus:ring-cyan-400/[0.06]
+    focus:-translate-y-[1px]
+  `}
                     />
                   </div>
 
@@ -318,7 +383,34 @@ function Register() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter your email"
-                      className="w-full px-4 py-3.5 rounded-xl bg-[#090b12] border border-white/[0.08] text-white text-sm sm:text-base placeholder:text-gray-600 outline-none transition-all duration-300 hover:border-blue-400/20 hover:-translate-y-[1px] focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06] focus:-translate-y-[1px]"
+                      className={`
+    w-full
+    px-4
+    py-3.5
+    rounded-xl
+
+    ${
+      isLight
+        ? "bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400"
+        : "bg-[#090b12] border border-white/[0.08] text-white placeholder:text-gray-600"
+    }
+
+    text-sm
+    sm:text-base
+    outline-none
+    transition-all
+    duration-300
+
+    ${
+      isLight
+        ? "hover:border-blue-400/40 hover:-translate-y-[1px] focus:border-blue-400/60 focus:bg-white"
+        : "hover:border-blue-400/20 hover:-translate-y-[1px] focus:border-blue-400/50"
+    }
+
+    focus:ring-4
+    focus:ring-blue-400/[0.06]
+    focus:-translate-y-[1px]
+  `}
                     />
                   </div>
 
@@ -333,7 +425,35 @@ function Register() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Create a password"
-                        className="w-full px-4 py-3.5 pr-14 rounded-xl bg-[#090b12] border border-white/[0.08] text-white text-sm sm:text-base placeholder:text-gray-600 outline-none transition-all duration-300 hover:border-violet-400/20 hover:-translate-y-[1px] focus:border-violet-400/50 focus:ring-4 focus:ring-violet-400/[0.06] focus:-translate-y-[1px]"
+                        className={`
+    w-full
+    px-4
+    py-3.5
+    pr-14
+    rounded-xl
+
+    ${
+      isLight
+        ? "bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400"
+        : "bg-[#090b12] border border-white/[0.08] text-white placeholder:text-gray-600"
+    }
+
+    text-sm
+    sm:text-base
+    outline-none
+    transition-all
+    duration-300
+
+    ${
+      isLight
+        ? "hover:border-violet-400/40 hover:-translate-y-[1px] focus:border-violet-400/60 focus:bg-white"
+        : "hover:border-violet-400/20 hover:-translate-y-[1px] focus:border-violet-400/50"
+    }
+
+    focus:ring-4
+    focus:ring-violet-400/[0.06]
+    focus:-translate-y-[1px]
+  `}
                       />
 
                       <button
@@ -445,7 +565,6 @@ function Register() {
           </div>
         </div>
       </div>
-
       <style>
         {`
           @keyframes pageEnter {

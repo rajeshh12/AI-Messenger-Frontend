@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
 
 function Login() {
   const navigate = useNavigate();
-
+  const { theme, toggleTheme } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const isLight = theme === "light";
 
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  // Login loading state
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
@@ -38,7 +39,6 @@ function Login() {
     }
 
     try {
-      // Start loading after validation
       setLoading(true);
 
       const response = await fetch(
@@ -79,7 +79,23 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#080b12] flex items-center justify-center px-4 py-8 sm:px-6 lg:px-8 overflow-hidden relative">
+    <div
+      className={`min-h-screen w-full flex items-center justify-center px-4 py-8 sm:px-6 lg:px-8 overflow-hidden relative transition-colors duration-300 ${
+        isLight ? "bg-gray-50 text-gray-900" : "bg-[#080b12] text-white"
+      }`}
+    >
+      <button
+        type="button"
+        onClick={toggleTheme}
+        className={`absolute top-5 right-5 z-50 w-10 h-10 rounded-xl flex items-center justify-center border transition-all duration-300 ${
+          isLight
+            ? "bg-white border-gray-200 text-gray-700 hover:bg-gray-100"
+            : "bg-[#11161f] border-white/[0.08] text-gray-300 hover:bg-white/[0.06] hover:text-white"
+        }`}
+        title={isLight ? "Switch to dark theme" : "Switch to light theme"}
+      >
+        {isLight ? "🌙" : "☀️"}
+      </button>
       <div className="absolute inset-0 opacity-[0.018] bg-[linear-gradient(rgba(255,255,255,1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,1)_1px,transparent_1px)] bg-[size:40px_40px] animate-[gridMove_18s_linear_infinite]" />
 
       <div className="relative z-10 w-full max-w-[430px] sm:max-w-[460px]">
@@ -149,11 +165,19 @@ function Login() {
             </div>
           </div>
 
-          <h1 className="text-[27px] sm:text-3xl font-bold text-white tracking-tight animate-[titleIn_0.7s_ease-out_0.1s_both]">
+          <h1
+            className={`text-[27px] sm:text-3xl font-bold tracking-tight animate-[titleIn_0.7s_ease-out_0.1s_both] ${
+              isLight ? "text-gray-900" : "text-white"
+            }`}
+          >
             Welcome Back
           </h1>
 
-          <p className="text-sm sm:text-base text-gray-400 mt-2 px-3 animate-[fadeUp_0.6s_ease-out_0.2s_both]">
+          <p
+            className={`text-sm sm:text-base mt-2 px-3 animate-[fadeUp_0.6s_ease-out_0.2s_both] ${
+              isLight ? "text-gray-500" : "text-gray-400"
+            }`}
+          >
             Login to your AI Messenger account
           </p>
         </div>
@@ -162,24 +186,25 @@ function Login() {
           <div className="absolute -inset-[1px] rounded-[22px] bg-gradient-to-br from-blue-500/25 via-purple-500/10 to-cyan-500/15 opacity-80 transition-all duration-500 hover:opacity-100 hover:blur-[2px]" />
 
           <div
-            className="
-              relative
-              w-full
-              bg-[#10141e]/95
-              backdrop-blur-xl
-              border border-white/[0.07]
-              rounded-[22px]
-              p-5
-              sm:p-7
-              md:p-8
-              shadow-2xl
-              shadow-black/50
-              transition-all
-              duration-500
-              hover:border-white/[0.11]
-              hover:-translate-y-1
-              hover:shadow-blue-900/10
-            "
+            className={`
+  relative
+  w-full
+  backdrop-blur-xl
+  rounded-[22px]
+  p-5
+  sm:p-7
+  md:p-8
+  shadow-2xl
+  transition-all
+  duration-500
+  hover:-translate-y-1
+
+  ${
+    isLight
+      ? "bg-white border border-gray-200 shadow-gray-200/60"
+      : "bg-[#10141e]/95 border border-white/[0.07] shadow-black/50"
+  }
+`}
           >
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-px bg-gradient-to-r from-transparent via-blue-500/60 to-transparent animate-[accentMove_3s_ease-in-out_infinite]" />
 
@@ -209,28 +234,34 @@ function Login() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   autoComplete="email"
-                  className="
-                    w-full
-                    h-[50px]
-                    px-4
-                    rounded-xl
-                    bg-[#090d15]
-                    border border-white/[0.08]
-                    text-white
-                    text-sm
-                    sm:text-base
-                    placeholder:text-gray-600
-                    outline-none
-                    transition-all
-                    duration-300
-                    hover:border-white/[0.14]
-                    hover:-translate-y-[1px]
-                    focus:border-blue-500/60
-                    focus:bg-[#0b1019]
-                    focus:ring-4
-                    focus:ring-blue-500/[0.07]
-                    focus:-translate-y-[1px]
-                  "
+                  className={`
+    w-full
+    h-[50px]
+    px-4
+    rounded-xl
+
+    ${
+      isLight
+        ? "bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400"
+        : "bg-[#090d15] border border-white/[0.08] text-white placeholder:text-gray-600"
+    }
+
+    text-sm
+    sm:text-base
+    outline-none
+    transition-all
+    duration-300
+
+    ${
+      isLight
+        ? "hover:border-gray-400 focus:border-blue-500/60 focus:bg-white"
+        : "hover:border-white/[0.14] hover:-translate-y-[1px] focus:border-blue-500/60 focus:bg-[#0b1019]"
+    }
+
+    focus:ring-4
+    focus:ring-blue-500/[0.07]
+    focus:-translate-y-[1px]
+  `}
                 />
               </div>
 
@@ -246,31 +277,36 @@ function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
                     autoComplete="current-password"
-                    className="
-                      w-full
-                      h-[50px]
-                      px-4
-                      pr-14
-                      rounded-xl
-                      bg-[#090d15]
-                      border border-white/[0.08]
-                      text-white
-                      text-sm
-                      sm:text-base
-                      placeholder:text-gray-600
-                      outline-none
-                      transition-all
-                      duration-300
-                      hover:border-white/[0.14]
-                      hover:-translate-y-[1px]
-                      focus:border-blue-500/60
-                      focus:bg-[#0b1019]
-                      focus:ring-4
-                      focus:ring-blue-500/[0.07]
-                      focus:-translate-y-[1px]
-                    "
-                  />
+                    className={`
+    w-full
+    h-[50px]
+    px-4
+    pr-12
+    rounded-xl
 
+    ${
+      isLight
+        ? "bg-white text-gray-900 placeholder:text-gray-400 border border-gray-300"
+        : "bg-[#0a0d14] text-gray-100 placeholder:text-gray-600 border border-white/[0.08]"
+    }
+
+    text-sm
+    sm:text-base
+    outline-none
+    transition-all
+    duration-300
+
+    ${
+      isLight
+        ? "hover:bg-gray-50 hover:border-gray-400 focus:bg-white focus:border-blue-500/60"
+        : "hover:border-white/[0.14] hover:-translate-y-[1px] focus:border-blue-500/60 focus:bg-[#0b1019]"
+    }
+
+    focus:ring-4
+    focus:ring-blue-500/[0.07]
+    focus:-translate-y-[1px]
+  `}
+                  />
                   <button
                     type="button"
                     onClick={() => setShowPassword((prev) => !prev)}

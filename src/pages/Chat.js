@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import AdminModal from "./AdminModal";
-
+import { useTheme } from "../context/ThemeContext";
 import {
   getConversations,
   createConversation,
@@ -18,6 +18,8 @@ import {
 } from "../services/api";
 
 function Chat() {
+  const { theme, toggleTheme } = useTheme();
+  const isLight = theme === "light";
   const navigate = useNavigate();
 
   const [showAdminModal, setShowAdminModal] = useState(false);
@@ -669,25 +671,21 @@ function Chat() {
       return;
     }
 
-    // Minimum 6 characters
     if (newPassword.length < 6) {
       setPasswordError("New password must be at least 6 characters");
       return;
     }
 
-    // At least one capital letter
     if (!/[A-Z]/.test(newPassword)) {
       setPasswordError("New password must contain at least one capital letter");
       return;
     }
 
-    // At least one number
     if (!/[0-9]/.test(newPassword)) {
       setPasswordError("New password must contain at least one number");
       return;
     }
 
-    // At least one special character
     if (!/[!@#$%^&*(),.?":{}|<>_\-\\[\];'/`~+=]/.test(newPassword)) {
       setPasswordError(
         "New password must contain at least one special character",
@@ -695,7 +693,6 @@ function Chat() {
       return;
     }
 
-    // New password and confirm password must match
     if (newPassword !== confirmPassword) {
       setPasswordError("New passwords do not match");
       return;
@@ -955,7 +952,11 @@ function Chat() {
   };
 
   return (
-    <div className="h-screen bg-[#090d12] text-white flex overflow-hidden">
+    <div
+      className={`h-screen flex overflow-hidden transition-colors duration-300 ${
+        isLight ? "bg-[#f8fafc] text-slate-900" : "bg-[#090d12] text-white"
+      }`}
+    >
       <style>
         {`
           * {
@@ -1002,21 +1003,20 @@ function Chat() {
 
       <aside
         className={`
-          fixed md:static
-          z-50
-          h-full
-          ${sidebarCollapsed ? "md:w-[74px]" : "md:w-[292px]"}
-          w-[292px]
-          bg-[#10151c]
-          border-r border-white/[0.06]
-          flex flex-col
-          transition-all duration-300
-          ${
-            mobileSidebar
-              ? "translate-x-0"
-              : "-translate-x-full md:translate-x-0"
-          }
-        `}
+    fixed md:static
+    z-50
+    h-full
+    ${sidebarCollapsed ? "md:w-[74px]" : "md:w-[292px]"}
+    w-[292px]
+    flex flex-col
+    transition-all duration-300
+    ${
+      isLight
+        ? "bg-white border-r border-slate-200"
+        : "bg-[#10151c] border-r border-white/[0.06]"
+    }
+    ${mobileSidebar ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+  `}
       >
         <div
           className={`
@@ -1107,14 +1107,19 @@ function Chat() {
           <div className="px-3 pb-3">
             <div
               className={`
-                relative
-                h-10
-                rounded-xl
-                bg-[#0a0e13]
-                border
-                ${searchQuery ? "border-blue-500/40" : "border-white/[0.06]"}
-                transition
-              `}
+    relative
+    h-10
+    rounded-xl
+    border
+    transition
+    ${
+      isLight
+        ? `bg-slate-50 ${searchQuery ? "border-blue-400" : "border-slate-200"}`
+        : `bg-[#0a0e13] ${
+            searchQuery ? "border-blue-500/40" : "border-white/[0.06]"
+          }`
+    }
+  `}
             >
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600">
                 ⌕
@@ -1226,11 +1231,15 @@ function Chat() {
                         cursor-pointer
                         transition-all
                         ${sidebarCollapsed ? "justify-center p-3" : "px-3 py-3"}
-                        ${
-                          isSelected
-                            ? "bg-blue-600/[0.10] text-white"
-                            : "text-gray-500 hover:bg-white/[0.035] hover:text-gray-300"
-                        }
+                  ${
+                    isLight
+                      ? isSelected
+                        ? "bg-blue-50 text-slate-900"
+                        : "text-slate-500 hover:bg-slate-50 hover:text-slate-700"
+                      : isSelected
+                        ? "bg-blue-600/[0.10] text-white"
+                        : "text-gray-500 hover:bg-white/[0.035] hover:text-gray-300"
+                  }
                       `}
                   >
                     {isSelected && (
@@ -1248,11 +1257,15 @@ function Chat() {
                           justify-center
                           text-xs
                           transition
-                          ${
-                            isSelected
-                              ? "bg-blue-500/15 text-blue-400"
-                              : "bg-white/[0.035] text-gray-600"
-                          }
+                      ${
+                        isLight
+                          ? isSelected
+                            ? "bg-blue-100 text-blue-500"
+                            : "bg-slate-100 text-slate-400"
+                          : isSelected
+                            ? "bg-blue-500/15 text-blue-400"
+                            : "bg-white/[0.035] text-gray-600"
+                      }
                         `}
                     >
                       {isSelected ? "●" : "◦"}
@@ -1282,7 +1295,6 @@ function Chat() {
                           className="relative flex items-center"
                           data-chat-actions
                         >
-                          {/* Desktop actions */}
                           <div
                             className="
       hidden
@@ -1348,7 +1360,6 @@ function Chat() {
                             </button>
                           </div>
 
-                          {/* Mobile / touch action button */}
                           <button
                             type="button"
                             onClick={(e) => {
@@ -1379,7 +1390,6 @@ function Chat() {
                             ⋮
                           </button>
 
-                          {/* Mobile action popup */}
                           {chatActionMenuId === conversation._id && (
                             <div
                               className="
@@ -1593,14 +1603,14 @@ function Chat() {
             <button
               onClick={() => setMobileSidebar(true)}
               className="
-                md:hidden
-                w-8
-                h-8
-                rounded-lg
-                text-gray-500
-                hover:text-white
-                hover:bg-white/[0.05]
-              "
+        md:hidden
+        w-8
+        h-8
+        rounded-lg
+        text-gray-500
+        hover:text-white
+        hover:bg-white/[0.05]
+      "
             >
               ☰
             </button>
@@ -1619,6 +1629,31 @@ function Chat() {
               )}
             </div>
           </div>
+
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="
+      ml-auto
+      w-9
+      h-9
+      rounded-xl
+      flex
+      items-center
+      justify-center
+      text-gray-400
+      hover:text-white
+      hover:bg-white/[0.06]
+      transition
+    "
+            title={
+              theme === "dark"
+                ? "Switch to light theme"
+                : "Switch to dark theme"
+            }
+          >
+            {theme === "dark" ? "☀️" : "🌙"}
+          </button>
         </header>
 
         {error && (
@@ -1715,6 +1750,7 @@ function Chat() {
                           fileInputRef={fileInputRef}
                           loading={loading}
                           uploadingFile={uploadingFile}
+                          theme={theme}
                         />
 
                         <span className="text-[11px] text-gray-600">
@@ -2146,18 +2182,7 @@ function Chat() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => {
-                    setPasswordError("");
-                    setPasswordSuccess("");
-
-                    setPasswordForm({
-                      currentPassword: "",
-                      newPassword: "",
-                      confirmPassword: "",
-                    });
-
-                    setChangePasswordOpen(true);
-                  }}
+                  onClick={toggleTheme}
                   className="
     w-full
     flex
@@ -2173,15 +2198,17 @@ function Chat() {
     transition
   "
                 >
-                  <div className="w-9 h-9 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
-                    🔑
+                  <div className="w-9 h-9 rounded-lg bg-violet-500/10 text-violet-400 flex items-center justify-center">
+                    {theme === "dark" ? "☀️" : "🌙"}
                   </div>
 
                   <div className="flex-1">
-                    <p className="text-sm font-medium">Change password</p>
+                    <p className="text-sm font-medium">
+                      {theme === "dark" ? "Light theme" : "Dark theme"}
+                    </p>
 
                     <p className="text-[10px] text-gray-600 mt-0.5">
-                      Update your account password
+                      Switch your appearance
                     </p>
                   </div>
                 </button>
@@ -2798,7 +2825,9 @@ function FileMenu({
   fileInputRef,
   loading,
   uploadingFile,
+  theme,
 }) {
+  const isLight = theme === "light";
   const selectFile = (accept) => {
     setFileAccept(accept);
 
@@ -2836,19 +2865,22 @@ function FileMenu({
 
       {showFileMenu && (
         <div
-          className="
+          className={`
     absolute
     bottom-12
     left-0
     w-56
     rounded-xl
-    bg-[#151b23]
-    border border-white/[0.08]
+    border
     shadow-2xl
-    shadow-black/40
     p-2
     z-50
-  "
+    ${
+      isLight
+        ? "bg-white border-slate-200 shadow-slate-300/30"
+        : "bg-[#151b23] border-white/[0.08] shadow-black/40"
+    }
+`}
         >
           <button
             type="button"
@@ -2857,20 +2889,22 @@ function FileMenu({
                 ".pdf,.txt,.json,.java,.js,.jsx,.ts,.tsx,.py,.c,.cpp,.h,.html,.css,.sql,.png,.jpg,.jpeg,.gif,.webp",
               )
             }
-            className="
-      w-full
-      flex
-      items-center
-      gap-3
-      px-3
-      py-2.5
-      rounded-lg
-      text-sm
-      text-gray-300
-      hover:bg-white/[0.06]
-      hover:text-white
-      transition
-    "
+          className={`
+  w-full
+  flex
+  items-center
+  gap-3
+  px-3
+  py-2.5
+  rounded-lg
+  text-sm
+  transition
+  ${
+    isLight
+      ? "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+      : "text-gray-300 hover:bg-white/[0.06] hover:text-white"
+  }
+`}
           >
             <span>📄</span>
             <span>All files</span>
@@ -2879,20 +2913,22 @@ function FileMenu({
           <button
             type="button"
             onClick={() => selectFile(".txt")}
-            className="
-      w-full
-      flex
-      items-center
-      gap-3
-      px-3
-      py-2.5
-      rounded-lg
-      text-sm
-      text-gray-300
-      hover:bg-white/[0.06]
-      hover:text-white
-      transition
-    "
+           className={`
+  w-full
+  flex
+  items-center
+  gap-3
+  px-3
+  py-2.5
+  rounded-lg
+  text-sm
+  transition
+  ${
+    isLight
+      ? "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+      : "text-gray-300 hover:bg-white/[0.06] hover:text-white"
+  }
+`}
           >
             <span>📝</span>
             <span>Text</span>
@@ -2901,20 +2937,22 @@ function FileMenu({
           <button
             type="button"
             onClick={() => selectFile(".json")}
-            className="
-      w-full
-      flex
-      items-center
-      gap-3
-      px-3
-      py-2.5
-      rounded-lg
-      text-sm
-      text-gray-300
-      hover:bg-white/[0.06]
-      hover:text-white
-      transition
-    "
+          className={`
+  w-full
+  flex
+  items-center
+  gap-3
+  px-3
+  py-2.5
+  rounded-lg
+  text-sm
+  transition
+  ${
+    isLight
+      ? "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+      : "text-gray-300 hover:bg-white/[0.06] hover:text-white"
+  }
+`}
           >
             <span>{"{}"}</span>
             <span>JSON</span>
@@ -2927,20 +2965,22 @@ function FileMenu({
                 ".java,.js,.jsx,.ts,.tsx,.py,.c,.cpp,.h,.html,.css,.sql",
               )
             }
-            className="
-      w-full
-      flex
-      items-center
-      gap-3
-      px-3
-      py-2.5
-      rounded-lg
-      text-sm
-      text-gray-300
-      hover:bg-white/[0.06]
-      hover:text-white
-      transition
-    "
+          className={`
+  w-full
+  flex
+  items-center
+  gap-3
+  px-3
+  py-2.5
+  rounded-lg
+  text-sm
+  transition
+  ${
+    isLight
+      ? "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+      : "text-gray-300 hover:bg-white/[0.06] hover:text-white"
+  }
+`}
           >
             <span>💻</span>
             <span>Code</span>
@@ -2949,20 +2989,22 @@ function FileMenu({
           <button
             type="button"
             onClick={() => selectFile(".png,.jpg,.jpeg,.gif,.webp")}
-            className="
-      w-full
-      flex
-      items-center
-      gap-3
-      px-3
-      py-2.5
-      rounded-lg
-      text-sm
-      text-gray-300
-      hover:bg-white/[0.06]
-      hover:text-white
-      transition
-    "
+         className={`
+  w-full
+  flex
+  items-center
+  gap-3
+  px-3
+  py-2.5
+  rounded-lg
+  text-sm
+  transition
+  ${
+    isLight
+      ? "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+      : "text-gray-300 hover:bg-white/[0.06] hover:text-white"
+  }
+`}
           >
             <span>🖼</span>
             <span>Images</span>
