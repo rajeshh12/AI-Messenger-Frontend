@@ -2,185 +2,525 @@
 
 <div align="center">
 
-### A smarter way to chat with AI.
-
-A modern AI-powered messaging application built with React.js,
-designed to provide a clean, responsive and interactive conversational experience.
+<img src="WHome.png" width="950" alt="AI Messenger"/>
 
 <br/>
 
-![React](https://img.shields.io/badge/React.js-18+-61DAFB?style=for-the-badge&logo=react&logoColor=black)
-![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3+-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
-![REST API](https://img.shields.io/badge/REST_API-Integrated-6366F1?style=for-the-badge)
-![Responsive](https://img.shields.io/badge/UI-Responsive-22C55E?style=for-the-badge)
+## ✨ A Smarter Way to Chat with AI
+
+### 💬 Conversations • 📎 Files • 🤖 AI • 🔐 Secure
+
+<p>
+A modern full-stack AI messaging application built with
+<strong>React.js</strong>, <strong>Node.js</strong>, <strong>Express.js</strong>,
+<strong>MongoDB</strong>, and <strong>Groq AI</strong>.
+</p>
+
+<br/>
+
+![React](https://img.shields.io/badge/React.js-18+-61DAFB?style=for-the-badge\&logo=react\&logoColor=black)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge\&logo=javascript\&logoColor=black)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-3+-06B6D4?style=for-the-badge\&logo=tailwindcss\&logoColor=white)
+![Node](https://img.shields.io/badge/Node.js-Backend-339933?style=for-the-badge\&logo=node.js\&logoColor=white)
+![Express](https://img.shields.io/badge/Express.js-REST_API-000000?style=for-the-badge\&logo=express\&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-Database-47A248?style=for-the-badge\&logo=mongodb\&logoColor=white)
+![Groq](https://img.shields.io/badge/Groq-AI-FF6B35?style=for-the-badge)
 
 </div>
 
 ---
 
-## ✨ Overview
+## 🌟 What is AI Messenger?
 
-**AI Messenger** is a full-stack AI chat application with a modern messaging
-interface.
+**AI Messenger** is a full-stack AI-powered messaging platform designed to
+make conversations with AI feel natural, organized, and personal.
 
-The frontend is built using **React.js** and communicates with a backend REST
-API to provide authentication, conversation management, AI-powered responses,
-file uploads and account management.
+Instead of being just a simple prompt-and-response chatbot, the application
+combines AI conversations with authentication, persistent chat history,
+file interaction, conversation management, account settings, and a polished
+responsive interface.
 
-The application is designed around a simple idea:
-
-> **Ask questions. Explore ideas. Manage conversations. Interact with AI.**
-
-The interface focuses on a clean dark-themed design, smooth interactions,
-responsive layouts and an experience inspired by modern AI chat applications.
+> **Ask questions. Explore ideas. Upload files. Continue conversations.**
 
 ---
 
-# 🖥️ Application Preview
+# 🎨 Built to Feel Like a Real Product
 
-## 🏠 Home Page
+AI Messenger focuses on the complete user experience — from the first
+screen to the final logout.
 
-The landing page introduces the AI Messenger application and gives users
-quick access to start chatting or log into an existing account.
+```text
+        🏠 Discover
+             ↓
+        🔐 Sign In
+             ↓
+        💬 Start Chatting
+             ↓
+        🤖 Talk to AI
+             ↓
+        📎 Work with Files
+             ↓
+        📚 Manage Chats
+             ↓
+        ⚙️ Manage Account
+             ↓
+        🚪 Logout
+```
 
-<div align="center">
+Every part of the application is designed around this experience.
 
-<img src="C:\Users\Rajesh\OneDrive\Pictures\Home.png" width="900" alt="AI Messenger Home Page"/>
+---
 
-</div>
+# 🏠 Home
 
-### Home Page Highlights
+<table>
+<tr>
+<td align="center">
 
-- Modern AI Messenger branding
-- Clean dark-themed interface
-- Responsive layout
-- Animated / interactive visual elements
-- Quick access to **Start Chatting**
-- Login navigation
-- Application feature highlights
-- AI assistant preview section
+### 🌙 Dark
+
+<img src="Home.png" width="450" alt="AI Messenger Dark Home"/>
+
+</td>
+
+<td align="center">
+
+### ☀️ Light
+
+<img src="WHome.png" width="450" alt="AI Messenger Light Home"/>
+
+</td>
+</tr>
+</table>
+
+### The first impression
+
+The home page gives users a simple entry point into the application with:
+
+* 🤖 AI Messenger branding
+* ✨ Clean modern design
+* 🚀 Start Chatting action
+* 🔐 Login access
+* 💬 AI assistant preview
+* 📱 Responsive interface
+* 🌙 Dark theme
+* ☀️ Light theme
 
 ---
 
 # 🔐 Authentication
 
-AI Messenger provides a dedicated authentication flow for users.
+AI Messenger provides a complete authentication experience for users.
+
+## 🔑 Login
+
+<table>
+<tr>
+<td align="center">
+
+### 🌙 Dark
+
+<img src="Login.png" width="430" alt="AI Messenger Dark Login"/>
+
+</td>
+
+<td align="center">
+
+### ☀️ Light
+
+<img src="WLogin.png" width="430" alt="AI Messenger Light Login"/>
+
+</td>
+</tr>
+</table>
+
+### Login includes
+
+* 📧 Email authentication
+* 🔐 Password authentication
+* 👁️ Password visibility
+* ✅ Form validation
+* ⚠️ Error handling
+* ⏳ Loading states
+* 🔑 JWT authentication
+* 📱 Responsive design
 
 ---
 
-## 🔑 Login Page
+# 📝 Create Your Account
 
-Users can securely log into their AI Messenger account using their registered
-email address and password.
+<table>
+<tr>
+<td align="center">
 
-<div align="center">
+### 🌙 Dark
 
-<img src="docs/screenshots/Login.png" width="700" alt="AI Messenger Login Page"/>
+<img src="Register.png" width="430" alt="AI Messenger Dark Register"/>
 
-</div>
+</td>
 
-### Login Features
+<td align="center">
 
-- Email-based authentication
-- Password authentication
-- Password visibility control
-- Form validation
-- Error handling
-- Loading state during authentication
-- Responsive login interface
-- Navigation to registration
+### ☀️ Light
 
-After successful authentication, the frontend stores the authentication token
-and allows the user to access protected application features.
+<img src="WRegister.png" width="430" alt="AI Messenger Light Register"/>
 
----
+</td>
+</tr>
+</table>
 
-## 📝 Register Page
+### Registration includes
 
-New users can create an AI Messenger account using their name, email and
-password.
-
-<div align="center">
-
-<img src="docs/screenshots/Register.png" width="900" alt="AI Messenger Register Page"/>
-
-</div>
-
-### Registration Features
-
-- User name input
-- Email validation
-- Password creation
-- Password visibility control
-- Password requirement guidance
-- Form validation
-- Loading state
-- Error handling
-- Login navigation
+* 👤 Username creation
+* 📧 Email validation
+* 🔐 Secure password creation
+* 👁️ Password visibility
+* 📋 Password guidance
+* ✅ Client-side validation
+* ⚠️ Error handling
+* ⏳ Loading states
 
 ---
 
-# 💬 AI Chat
+# 💬 The Heart of AI Messenger
 
-The main part of AI Messenger is the conversational interface.
+## 🤖 AI Chat
 
-<div align="center">
+<table>
+<tr>
+<td align="center">
 
-<img src="docs/screenshots/Chat.png" width="1000" alt="AI Messenger Chat Page"/>
+### 🌙 Dark
 
-</div>
+<img src="DChat.png" width="500" alt="AI Messenger Dark Chat"/>
 
-### Chat Features
+</td>
 
-- Create new conversations
-- Send messages to AI
-- Receive AI-generated responses
-- Maintain conversation history
-- Rename conversations
-- Delete conversations
-- Regenerate AI responses
-- File upload support
-- User authentication
-- Responsive chat interface
-- Loading indicators
-- Error handling
+<td align="center">
 
-The frontend communicates with the backend through REST APIs to send user
-messages and retrieve AI-generated responses.
+### ☀️ Light
+
+<img src="WChat.png" width="500 " alt="AI Messenger Light Chat"/>
+
+</td>
+</tr>
+</table>
+
+The chat experience is the core of AI Messenger.
+
+Users can create conversations, ask questions, receive AI-generated answers,
+and continue conversations over time.
+
+### 💡 Chat Features
+
+* 💬 AI-powered conversations
+* ➕ New conversations
+* 📚 Conversation history
+* 📝 Rename conversations
+* 🗑️ Delete conversations
+* 🔄 Regenerate AI responses
+* 📎 Upload files
+* 📄 Interact with file content
+* 🔐 Protected conversations
+* ⏳ AI loading states
+* ⚠️ Error handling
+* 📱 Responsive chat interface
 
 ---
 
-# 🧠 How AI Messenger Works
 
-The application follows a simple full-stack communication flow.
+# 📎 Files Meet AI
+
+AI Messenger isn't limited to plain text conversations.
+
+Users can upload files and interact with their content through the
+conversation experience.
 
 ```text
-                    ┌──────────────────────┐
-                    │      User Browser    │
-                    │                      │
-                    │     React Frontend   │
-                    └──────────┬───────────┘
-                               │
-                               │ REST API
-                               ▼
-                    ┌──────────────────────┐
-                    │    Node.js Backend   │
-                    │      Express.js      │
-                    └──────────┬───────────┘
-                               │
-                 ┌─────────────┼─────────────┐
-                 │             │             │
-                 ▼             ▼             ▼
-            MongoDB        Groq AI       File APIs
-                 │             │             │
-                 │             ▼             │
-                 │        AI Response       │
-                 │             │             │
-                 └─────────────┼─────────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │     React Frontend   │
-                    │   Displays Response  │
-                    └──────────────────────┘
+📎 Upload
+    ↓
+📄 Process
+    ↓
+🧠 Understand
+    ↓
+💬 Ask Questions
+    ↓
+🤖 AI Response
+```
+
+### File interaction
+
+* 📎 File upload
+* 📄 File processing
+* 💬 Ask questions about uploaded content
+* 🔐 Protected file interaction
+* ⚠️ Upload error handling
+* ⏳ Processing states
+
+---
+
+# 🔄 One Answer Isn't Always Enough
+
+Sometimes the first AI response isn't exactly what you want.
+
+That's why AI Messenger includes **Regenerate**.
+
+```text
+🤖 AI Response
+      │
+      ▼
+ 🔄 Regenerate
+      │
+      ▼
+ 🤖 New Response
+```
+
+Users can quickly request another AI-generated response without manually
+repeating the conversation.
+
+---
+
+# 📚 Your Conversations, Organized
+
+AI Messenger treats conversations as persistent workspaces rather than
+temporary messages.
+
+### ➕ Create
+
+Start a fresh conversation whenever you need one.
+
+### 📝 Rename
+
+Give conversations meaningful names.
+
+### 📚 History
+
+Return to previous conversations.
+
+### 🗑️ Delete
+
+Remove conversations you no longer need.
+
+### 🔐 Protected
+
+Your conversations are associated with authenticated users.
+
+---
+
+# ⚙️ Account & Settings
+
+A dedicated settings area gives users control over their account and
+application preferences.
+
+### 👤 Account
+
+View and manage account information.
+
+### 🔐 Security
+
+Change your password securely.
+
+### 🎨 Appearance
+
+Switch between:
+
+**🌙 Dark Mode**
+**☀️ Light Mode**
+
+### 🔑 Administration
+
+Access available administrative functionality.
+
+### 🗑️ Account
+
+Permanently delete the account when required.
+
+---
+
+# 🚪 Logout
+
+Logout is part of the normal account experience.
+
+<table>
+<tr>
+<div align="center">
+
+<img src="Logout.png" width="650" alt="AI Messenger Logout"/>
+
+</div>
+</tr>
+</table>
+
+When the user chooses **Logout**:
+
+```text
+👤 User
+   │
+   ▼
+🚪 Logout
+   │
+   ├── 🔑 Remove authentication token
+   │
+   ├── 🧹 Clear authenticated state
+   │
+   └── 🏠 Return to public experience
+```
+
+Simple, clear, and secure.
+
+---
+
+# 🛡️ Security
+
+Security is built into the application flow.
+
+### 🔐 JWT Authentication
+
+Authenticated users receive a JWT used for protected requests.
+
+### 🔒 Protected APIs
+
+Private resources require authentication.
+
+### 👤 User-Specific Data
+
+User conversations and account resources are protected.
+
+### 🗝️ Environment Secrets
+
+Sensitive credentials such as AI and database keys are kept outside
+the frontend source code.
+
+### 🚪 Secure Logout
+
+Authentication state is cleared when the user logs out.
+
+---
+
+# 🏗️ How Everything Connects
+
+```text
+                         🤖 AI MESSENGER
+                                │
+              ┌─────────────────┼─────────────────┐
+              │                 │                 │
+              ▼                 ▼                 ▼
+          🔐 Auth            💬 Chat           📎 Files
+              │                 │                 │
+              └─────────────────┼─────────────────┘
+                                │
+                                ▼
+                         🟢 Express.js
+                                │
+                    ┌───────────┴───────────┐
+                    │                       │
+                    ▼                       ▼
+               🗄️ MongoDB              🤖 Groq AI
+                    │                       │
+                    └───────────┬───────────┘
+                                │
+                                ▼
+                           ⚛️ React UI
+```
+
+---
+
+# 🛠️ Technology Stack
+
+<div align="center">
+
+| Layer             | Technologies                         |
+| :---------------- | :----------------------------------- |
+| 🎨 Frontend       | React.js • JavaScript • Tailwind CSS |
+| 🟢 Backend        | Node.js • Express.js                 |
+| 🗄️ Database      | MongoDB                              |
+| 🤖 AI             | Groq                                 |
+| 🔐 Authentication | JWT                                  |
+| 🌐 Communication  | REST APIs                            |
+| 🔧 Tools          | Git • GitHub • VS Code • npm         |
+
+</div>
+
+---
+
+# ✨ What Makes It More Than a Chatbot?
+
+A basic AI application can be:
+
+```text
+Input → AI → Output
+```
+
+AI Messenger is:
+
+```text
+             👤 USER
+                │
+                ▼
+          🔐 AUTHENTICATION
+                │
+                ▼
+           💬 CONVERSATIONS
+                │
+       ┌────────┼────────┐
+       │        │        │
+       ▼        ▼        ▼
+     🤖 AI     📎 FILES  📚 HISTORY
+       │        │        │
+       └────────┼────────┘
+                │
+                ▼
+           🗄️ MONGODB
+                │
+                ▼
+          ⚙️ ACCOUNT
+                │
+          ┌─────┴─────┐
+          ▼           ▼
+       🎨 Theme     🚪 Logout
+```
+
+It combines **AI + full-stack development + authentication + database +
+file interaction + modern UI** into one application.
+
+---
+
+# 📱 Responsive Experience
+
+AI Messenger is designed to provide a consistent experience across:
+
+**💻 Desktop**
+**🖥️ Laptop**
+**📱 Tablet**
+**📲 Mobile**
+
+The interface adapts while keeping the important actions easy to access.
+
+---
+
+<div align="center">
+
+# 🤖 AI Messenger
+
+### **Ask. Explore. Create.**
+
+<br/>
+
+💬 **Smart Conversations**
+📎 **File Interaction**
+🔐 **Secure Authentication**
+🎨 **Beautiful Themes**
+
+<br/>
+
+---
+
+### Built with ❤️ using
+
+**React.js • Node.js • Express.js • MongoDB • Groq AI**
+
+<br/>
+
+### ✨ A smarter way to chat with AI.
+
+</div>
