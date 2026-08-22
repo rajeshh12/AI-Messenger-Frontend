@@ -9,6 +9,7 @@ import {
   getConversations,
   createConversation,
   deleteConversation,
+  updateConversation,
   getMessages,
   sendAIMessage,
   regenerateAIMessage,
@@ -73,6 +74,47 @@ function Chat() {
 
   const [showFileMenu, setShowFileMenu] = useState(false);
   const [fileAccept, setFileAccept] = useState("*/*");
+
+  const [renameConversationId, setRenameConversationId] = useState(null);
+  const [renameTitle, setRenameTitle] = useState("");
+  const [renameLoading, setRenameLoading] = useState(false);
+
+  const handleRenameConversation = async () => {
+    if (!renameConversationId || !renameTitle.trim() || renameLoading) {
+      return;
+    }
+
+    try {
+      setRenameLoading(true);
+      setError("");
+
+      const data = await updateConversation(
+        renameConversationId,
+        renameTitle.trim(),
+      );
+
+      const updatedConversation = data.conversation;
+
+      setConversations((previous) =>
+        previous.map((conversation) =>
+          conversation._id === renameConversationId
+            ? updatedConversation
+            : conversation,
+        ),
+      );
+
+      if (selectedConversation?._id === renameConversationId) {
+        setSelectedConversation(updatedConversation);
+      }
+
+      setRenameConversationId(null);
+      setRenameTitle("");
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setRenameLoading(false);
+    }
+  };
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -1193,30 +1235,58 @@ function Chat() {
                           </p>
                         </div>
 
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
 
-                            requestDeleteConversation(conversation._id);
-                          }}
-                          className="
-                              opacity-0
-                              group-hover:opacity-100
-                              w-7
-                              h-7
-                              rounded-lg
-                              flex
-                              items-center
-                              justify-center
-                              text-gray-600
-                              hover:text-red-400
-                              hover:bg-red-500/10
-                              transition
-                            "
-                          title="Delete conversation"
-                        >
-                          ×
-                        </button>
+                              setRenameConversationId(conversation._id);
+                              setRenameTitle(conversation.title || "");
+                            }}
+                            className="
+      opacity-0
+      group-hover:opacity-100
+      w-7
+      h-7
+      rounded-lg
+      flex
+      items-center
+      justify-center
+      text-gray-600
+      hover:text-blue-400
+      hover:bg-blue-500/10
+      transition
+    "
+                            title="Rename conversation"
+                          >
+                            ✎
+                          </button>
+
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+
+                              requestDeleteConversation(conversation._id);
+                            }}
+                            className="
+      opacity-0
+      group-hover:opacity-100
+      w-7
+      h-7
+      rounded-lg
+      flex
+      items-center
+      justify-center
+      text-gray-600
+      hover:text-red-400
+      hover:bg-red-500/10
+      transition
+    "
+                            title="Delete conversation"
+                          >
+                            ×
+                          </button>
+                        </div>
                       </>
                     )}
                   </div>
@@ -2261,6 +2331,122 @@ function Chat() {
           </div>
         </div>
       )}
+
+      {renameConversationId && (
+        <div
+          className="
+      fixed
+      inset-0
+      z-[180]
+      flex
+      items-center
+      justify-center
+      px-4
+      bg-black/70
+      backdrop-blur-md
+    "
+          onClick={() => {
+            if (!renameLoading) {
+              setRenameConversationId(null);
+              setRenameTitle("");
+            }
+          }}
+        >
+          <div
+            className="
+        w-full
+        max-w-sm
+        rounded-2xl
+        bg-[#151b23]
+        border border-white/[0.08]
+        shadow-2xl
+        shadow-black/50
+        p-5
+      "
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-base font-semibold text-gray-100">
+              Rename conversation
+            </h3>
+
+            <p className="text-sm text-gray-500 mt-2">
+              Enter a new name for this conversation.
+            </p>
+
+            <input
+              autoFocus
+              value={renameTitle}
+              onChange={(e) => setRenameTitle(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleRenameConversation();
+                }
+              }}
+              maxLength={100}
+              placeholder="Conversation name"
+              className="
+          w-full
+          h-11
+          mt-4
+          rounded-xl
+          bg-[#0a0e13]
+          border
+          border-white/[0.07]
+          focus:border-blue-500/40
+          outline-none
+          px-3
+          text-sm
+          text-gray-200
+          placeholder:text-gray-700
+        "
+            />
+
+            <div className="flex gap-2 mt-5">
+              <button
+                type="button"
+                onClick={() => {
+                  setRenameConversationId(null);
+                  setRenameTitle("");
+                }}
+                disabled={renameLoading}
+                className="
+            flex-1
+            h-10
+            rounded-xl
+            bg-white/[0.04]
+            border border-white/[0.06]
+            text-sm
+            text-gray-400
+            hover:text-white
+            hover:bg-white/[0.07]
+            disabled:opacity-40
+          "
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                onClick={handleRenameConversation}
+                disabled={renameLoading || !renameTitle.trim()}
+                className="
+            flex-1
+            h-10
+            rounded-xl
+            bg-blue-600
+            hover:bg-blue-500
+            disabled:opacity-40
+            text-sm
+            font-medium
+            text-white
+          "
+              >
+                {renameLoading ? "Saving..." : "Rename"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <AdminModal
         isOpen={showAdminModal}
         onClose={() => setShowAdminModal(false)}
@@ -2486,28 +2672,6 @@ function FileMenu({
 
           <button
             type="button"
-            onClick={() => selectFile(".pdf")}
-            className="
-      w-full
-      flex
-      items-center
-      gap-3
-      px-3
-      py-2.5
-      rounded-lg
-      text-sm
-      text-gray-300
-      hover:bg-white/[0.06]
-      hover:text-white
-      transition
-    "
-          >
-            <span>📕</span>
-            <span>PDF</span>
-          </button>
-
-          <button
-            type="button"
             onClick={() => selectFile(".txt")}
             className="
       w-full
@@ -2600,7 +2764,7 @@ function FileMenu({
 
           <div className="mt-2 pt-2 border-t border-white/[0.06] px-3 pb-1">
             <p className="text-[11px] text-gray-500 leading-5">
-              PDF, TXT, JSON, Code &amp; Images
+              TXT, Code &amp; Images
               <br />
               Maximum file size: 5 MB
             </p>

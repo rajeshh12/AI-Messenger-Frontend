@@ -57,6 +57,11 @@ export const deleteConversation = async (conversationId) => {
 };
 
 export const updateConversation = async (conversationId, title) => {
+  console.log("UPDATE CONVERSATION API CALLED");
+  console.log("ID:", conversationId);
+  console.log("TITLE:", title);
+  console.log("API URL:", `${API_URL}/conversations/${conversationId}`);
+
   return apiRequest(`/conversations/${conversationId}`, {
     method: "PATCH",
 
